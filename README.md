@@ -1,2 +1,2 @@
 # FISH.me-WeatherForecast
-The weather forecast project for FISH.me senior project
+The FISH.me project will use an unmanned aerial vehicle (UAV) to operate autonomously in open sea areas to acquire data from the SONAR module at the fish aggregating device (FAD). Given that the mission is run at sea, this website will assist in forecasting the weather before carrying out the project flight mission to determine whether the weather will be appropriate for operation.
