@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FISH.me Weather</title>
+    <link rel="stylesheet" type="text/css" href="styles/main.css">
+</head>
+<body>
+
+  <div class="container">
+    <h1>Weather prediction at FISH.me mission area</h1>
+
+    <canvas id="myChart"></canvas>
+
+    <form action="/graph" method="POST" class="buttons">
+        <button type="submit" value="rain" name="select" style="--clr:#1e9bff"><span>Rain</span><i></i></button>
+        <button type="submit" value="showers" name="select" style="--clr:#7f11e0"><span>Showers</span><i></i></button>
+        <button type="submit" value="windspeed80m" name="select" style="--clr:#6eff3e"><span>Windspeed 80m</span><i></i></button>
+        <button type="submit" value="windspeed120m" name="select" style="--clr:#ff1867"><span>Windspeed 120m</span><i></i></button>
+    </form>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js"></script>
+    <script>
+        var data = JSON.parse('<%- JSON.stringify(locals.x_axis) %>');
+        var time = JSON.parse('<%- JSON.stringify(locals.y_axis) %>');
+        var label = JSON.parse('<%- JSON.stringify(locals.label) %>');
+        var borderColor = JSON.parse('<%- JSON.stringify(locals.borderColor) %>');
+        var backgroundColor = JSON.parse('<%- JSON.stringify(locals.backgroundColor) %>');
+        var graphType = JSON.parse('<%- JSON.stringify(locals.graphType) %>');
+        
+        var ctx = document.getElementById('myChart').getContext('2d');
+
+        var myChart = new Chart(ctx, {
+            type: graphType,
+            data: {
+                labels: time,
+                datasets: [{
+                    label: label,
+                    data: data,
+                    backgroundColor: backgroundColor,
+                    borderColor: borderColor,
+                    borderWidth: 1
+                }]
+            },
+            options: {
+              legend: {
+                labels: {
+                  fontColor: 'white'
+                }
+              },
+                scales: {
+                    x: {
+                        title: {
+                            display: true,
+                            text: 'Date & Time'
+                        },
+                        ticks: {
+                          font: {
+                            weight: "bold"
+                          }
+                        },
+                    },
+                    y: {
+                        beginAtZero: true, // Start the y-axis at zero
+                        title: {
+                            display: true,
+                            text: label // Title for the y-axis
+                        },
+                        ticks: {
+                          font: {
+                            weight: "bold"
+                          }
+                        }
+                    }
+                },
+                plugins: {
+                    title: {
+                        display: true,
+                        text: 'Weather at FISH.me operating area', // Title of the chart
+                        font: {
+                            size: 20 // Adjust the font size of the title
+                        }
+                    }
+                }
+            }
+        });
+    </script>
+
+  </div>
+</body>
+</html>

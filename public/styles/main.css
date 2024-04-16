@@ -1,0 +1,201 @@
+* {
+    background-color: #27282c;
+}
+
+canvas {
+    width: 100%;
+    max-width: 1000px;
+}
+
+.container {
+    display: flex;
+    flex-direction: column;
+    margin: 20px;
+    justify-content: center;
+    align-items: center;
+    gap: 70px;
+}
+
+h1 {
+    padding-top: 50px;
+    color: #fff;
+    text-decoration: none;
+    text-transform: uppercase;
+}
+
+form {
+    display: flex;
+    justify-content: center;
+    width: 70%;
+    margin-top: 40px;
+    gap: 100px;
+}
+
+button {
+    position: relative;
+    background: #fff;
+    text-decoration: none;
+    color: #fff;
+    text-transform: uppercase;
+    font-size: 0.7em;
+    letter-spacing: 0.1em;
+    font-weight: 400;
+    padding: 10px 30px;
+    transition: 0.5s;
+    width: 100% !important;
+}
+
+button:hover {
+    background: var(--clr);
+    color: var(--clr);
+    letter-spacing: 0.12em;
+    box-shadow: 0 0 35px var(--clr);
+}
+
+button::before {
+    content: '';
+    position: absolute;
+    inset: 2px;
+    background-color: #27282c;
+}
+
+button span {
+    position: relative;
+    z-index: 1;
+}
+
+@media (max-width: 1550px) {
+    .container {
+        gap: 0;
+    } 
+
+    h1 {
+        padding-top: 10px;
+    }
+}
+
+@media (max-width: 1300px) {
+    canvas {
+        max-width: 800px
+    }
+
+    h1 {
+        font-size: 1.7em;
+    }
+
+    button {
+        font-size: 0.6em;
+    }
+
+    form {
+        width: 90%;
+    }
+}
+
+@media (max-width: 870px) {
+    canvas {
+        max-width: 750px
+    }
+
+    .container {
+        gap: 20px;
+    }
+
+    form {
+        width: 90%;
+    }
+
+    button {
+        font-size: 0.5em;
+    }
+
+    h1 {
+        font-size: 1.5em;
+    }
+}
+
+@media (max-width: 760px) {
+
+    .container {
+        gap: 40px;
+    }
+
+    form {
+        width: 95%;
+    }
+}
+
+@media (max-width: 760px) {
+
+    .container {
+        gap: 60px;
+    }
+}
+
+@media (max-width: 600px) {
+
+    .container {
+        gap: 30px;
+    }
+
+    form {
+        flex-direction: column;
+        gap: 15px;
+        width: 50%;
+    }
+}
+
+@media (max-width: 550px) {
+
+    canvas {
+        padding-top: 20px;
+        max-width: 800px
+    }
+    
+    .container {
+        gap: 40px;
+    }
+
+    h1 {
+        padding-top: 20px;
+        font-size: 1em;
+    }
+
+    form {
+        gap: 15px;
+        width: 50%;
+    }
+}
+
+@media (max-width: 460px) {
+
+    canvas {
+        padding-top: 20px;
+        max-width: 1500px;
+        padding-right: 30px;
+    }
+    
+    .container {
+        gap: 120px;
+    }
+
+    h1 {
+        padding-top: 60px;
+        font-size: 0.85em;
+    }
+
+    form {
+        gap: 15px;
+        width: 50%;
+    }
+}
+
+@media (max-width: 395px) {
+
+    h1 {
+        font-size: 0.8em;
+    }
+}
+
+
+
