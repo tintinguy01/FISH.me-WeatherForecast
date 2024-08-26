@@ -3,7 +3,7 @@ import bodyParser from 'body-parser';
 import axios from 'axios';
 
 const app = express();
-const port = 3000;
+const port = process.env.PORT || 3000;
 const API_URL = "https://api.open-meteo.com/v1/forecast?";
 
 app.use(express.static('public'));
