@@ -1,15 +1,21 @@
 import express from 'express';
 import bodyParser from 'body-parser';
 import axios from 'axios';
+import path from 'path';
 
 const app = express();
 const port = process.env.PORT || 3000;
 const API_URL = "https://api.open-meteo.com/v1/forecast?";
 
-app.use(express.static('public'));
-app.use(bodyParser.urlencoded({ extended: true }));
+// Set up view engine and directory for views
 app.set('view engine', 'ejs');
+app.set('views', path.join(__dirname, 'views'));
 
+// Serve static files from the 'public' directory
+app.use(express.static(path.join(__dirname, 'public')));
+app.use(bodyParser.urlencoded({ extended: true }));
+
+// Placeholder variables
 let data;
 let graph_time;
 let name;
@@ -17,8 +23,9 @@ let backgroundColor;
 let borderColor;
 let type;
 
+// Route to render the index view
 app.get('/', (req, res) => {
-    res.render('index.ejs', {
+    res.render('index', {
         x_axis: data,
         y_axis: graph_time,
         label: name,
@@ -28,6 +35,7 @@ app.get('/', (req, res) => {
     });
 });
 
+// Route to handle form submission and fetch weather data
 app.post('/graph', async (req, res) => {
     const lat = '11.83';
     const lng = '99.85';
@@ -43,57 +51,38 @@ app.post('/graph', async (req, res) => {
             throw new Error('Invalid response data structure');
         }
 
+        // Process the response data
         const time = responseData.hourly.time;
+        const temperature = responseData.hourly.temperature_2m;
         const rain = responseData.hourly.rain;
         const showers = responseData.hourly.showers;
-        const windspeed80m = responseData.hourly.wind_speed_80m;
-        const windspeed120m = responseData.hourly.wind_speed_120m;
+        const wind_speed_80m = responseData.hourly.wind_speed_80m;
+        const wind_speed_120m = responseData.hourly.wind_speed_120m;
 
-        switch (req.body.select) {
-            case "rain":
-                data = rain;
-                graph_time = time;
-                name = "Rain";
-                backgroundColor = 'rgba(30, 155, 255, 0.2)';
-                borderColor = 'rgba(30, 155, 255, 1)';
-                type = "line";
-                break;
-            case "showers":
-                data = showers;
-                graph_time = time;
-                name = "Showers";
-                backgroundColor = 'rgba(127, 17, 224, 0.2)';
-                borderColor = 'rgba(127, 17, 224, 1)';
-                type = "bar";
-                break;
-            case "windspeed80m":
-                data = windspeed80m;
-                graph_time = time;
-                name = "Windspeed at 80m";
-                backgroundColor = 'rgba(110, 255, 62, 0.2)';
-                borderColor = 'rgba(110, 255, 62, 1)';
-                type = "line";
-                break;
-            case "windspeed120m":
-                data = windspeed120m;
-                graph_time = time;
-                name = "Windspeed at 120m";
-                backgroundColor = 'rgba(255, 24, 103, 0.2)';
-                borderColor = 'rgba(255, 24, 103, 1)';
-                type = "line";
-                break;
-            default:
-                throw new Error('Invalid data selection');
-        }
+        data = temperature;
+        graph_time = time;
+        name = 'Temperature';
+        backgroundColor = 'rgba(75, 192, 192, 0.2)';
+        borderColor = 'rgba(75, 192, 192, 1)';
+        type = 'line';
 
-        res.redirect('/');
+        // Render the index view with updated data
+        res.render('index', {
+            x_axis: data,
+            y_axis: graph_time,
+            label: name,
+            backgroundColor: backgroundColor,
+            borderColor: borderColor,
+            graphType: type
+        });
 
     } catch (error) {
         console.error('Error fetching weather data:', error);
-        res.status(500).send('Error fetching weather data');
+        res.status(500).send('Internal Server Error');
     }
 });
 
+// Start the server
 app.listen(port, () => {
-    console.log(`Server is running on port #${port}.`);
+    console.log(`Server is running on port ${port}`);
 });
