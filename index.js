@@ -11,12 +11,18 @@ const app = express();
 const port = process.env.PORT || 3000;
 const API_URL = process.env.API_URL || "https://api.open-meteo.com/v1/forecast?";
 
+// Ensure that API_URL is defined
+if (!API_URL) {
+    console.error('API_URL is not defined in environment variables');
+    process.exit(1);
+}
+
 // Set up view engine and directory for views
 app.set('view engine', 'ejs');
-app.set('views', path.join(__dirname, 'views'));
+app.set('views', path.resolve(__dirname, 'views'));
 
 // Serve static files from the 'public' directory
-app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.static(path.resolve(__dirname, 'public')));
 app.use(bodyParser.urlencoded({ extended: true }));
 
 // Placeholder variables
@@ -81,7 +87,7 @@ app.post('/graph', async (req, res) => {
         });
 
     } catch (error) {
-        console.error('Error fetching weather data:', error);
+        console.error('Error fetching weather data:', error.message);
         res.status(500).send('Internal Server Error');
     }
 });
