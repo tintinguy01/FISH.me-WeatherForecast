@@ -18,7 +18,14 @@ let borderColor;
 let type;
 
 app.get('/', (req, res) => {
-    res.render('index.ejs', { x_axis: data, y_axis: graph_time, label: name, backgroundColor: backgroundColor, borderColor: borderColor, graphType: type });
+    res.render('index.ejs', {
+        x_axis: data,
+        y_axis: graph_time,
+        label: name,
+        backgroundColor: backgroundColor,
+        borderColor: borderColor,
+        graphType: type
+    });
 });
 
 app.post('/graph', async (req, res) => {
@@ -27,10 +34,11 @@ app.post('/graph', async (req, res) => {
     const params = 'hourly=temperature_2m,rain,showers,wind_speed_80m,wind_speed_120m&timezone=Asia%2FBangkok';
     
     try {
+        console.log(`Fetching weather data for coordinates: (${lat}, ${lng}) with params: ${params}`);
         const result = await axios.get(`${API_URL}latitude=${lat}&longitude=${lng}&${params}`);
         const responseData = result.data;
+        console.log(`Received data: ${JSON.stringify(responseData)}`);
 
-        // Check if the response data has the expected structure
         if (!responseData || !responseData.hourly) {
             throw new Error('Invalid response data structure');
         }
@@ -78,11 +86,10 @@ app.post('/graph', async (req, res) => {
                 throw new Error('Invalid data selection');
         }
 
-        // Send the data to client-side JavaScript
         res.redirect('/');
 
     } catch (error) {
-        console.log(error);
+        console.error('Error fetching weather data:', error);
         res.status(500).send('Error fetching weather data');
     }
 });
