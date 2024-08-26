@@ -67,34 +67,54 @@ app.post('/graph', async (req, res) => {
             throw new Error('Invalid response data structure');
         }
 
-        // Process the response data
         const time = responseData.hourly.time;
-        const temperature = responseData.hourly.temperature_2m;
         const rain = responseData.hourly.rain;
         const showers = responseData.hourly.showers;
-        const wind_speed_80m = responseData.hourly.wind_speed_80m;
-        const wind_speed_120m = responseData.hourly.wind_speed_120m;
+        const windspeed80m = responseData.hourly.wind_speed_80m;
+        const windspeed120m = responseData.hourly.wind_speed_120m;
 
-        data = temperature;
-        graph_time = time;
-        name = 'Temperature';
-        backgroundColor = 'rgba(75, 192, 192, 0.2)';
-        borderColor = 'rgba(75, 192, 192, 1)';
-        type = 'line';
+        switch (req.body.select) {
+            case "rain":
+                data = rain;
+                graph_time = time;
+                name = "Rain";
+                backgroundColor = 'rgba(30, 155, 255, 0.2)';
+                borderColor = 'rgba(30, 155, 255, 1)';
+                type = "line";
+                break;
+            case "showers":
+                data = showers;
+                graph_time = time;
+                name = "Showers";
+                backgroundColor = 'rgba(127, 17, 224, 0.2)';
+                borderColor = 'rgba(127, 17, 224, 1)';
+                type = "bar";
+                break;
+            case "windspeed80m":
+                data = windspeed80m;
+                graph_time = time;
+                name = "Windspeed at 80m";
+                backgroundColor = 'rgba(110, 255, 62, 0.2)';
+                borderColor = 'rgba(110, 255, 62, 1)';
+                type = "line";
+                break;
+            case "windspeed120m":
+                data = windspeed120m;
+                graph_time = time;
+                name = "Windspeed at 120m";
+                backgroundColor = 'rgba(255, 24, 103, 0.2)';
+                borderColor = 'rgba(255, 24, 103, 1)';
+                type = "line";
+                break;
+            default:
+                throw new Error('Invalid data selection');
+        }
 
-        // Render the index view with updated data
-        res.render('index', {
-            x_axis: data,
-            y_axis: graph_time,
-            label: name,
-            backgroundColor: backgroundColor,
-            borderColor: borderColor,
-            graphType: type
-        });
+        res.redirect('/');
 
     } catch (error) {
-        console.error('Error fetching weather data:', error.message);
-        res.status(500).send('Internal Server Error');
+        console.error('Error fetching weather data:', error);
+        res.status(500).send('Error fetching weather data');
     }
 });
 
