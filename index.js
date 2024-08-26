@@ -2,10 +2,14 @@ import express from 'express';
 import bodyParser from 'body-parser';
 import axios from 'axios';
 import path from 'path';
+import dotenv from 'dotenv';
+
+// Load environment variables from .env file
+dotenv.config();
 
 const app = express();
 const port = process.env.PORT || 3000;
-const API_URL = "https://api.open-meteo.com/v1/forecast?";
+const API_URL = process.env.API_URL || "https://api.open-meteo.com/v1/forecast?";
 
 // Set up view engine and directory for views
 app.set('view engine', 'ejs');
